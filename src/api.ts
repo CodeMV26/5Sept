@@ -26,6 +26,18 @@ export async function fetchMatches(competitionCode: string = 'SA') {
   }
 }
 
+export async function fetchUpcomingMatches(competitionCode: string = 'SA') {
+  try {
+    const response = await fetch(`${BASE_URL}/competitions/${competitionCode}/matches?status=SCHEDULED`, { headers });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const data = await response.json();
+    return data.matches || [];
+  } catch (error) {
+    console.error('Errore recupero prossime partite:', error);
+    return [];
+  }
+}
+
 export async function fetchCompetitions() {
   try {
     const response = await fetch(`${BASE_URL}/competitions`, { headers });
@@ -54,6 +66,10 @@ export async function getMatches(competitionCode?: string) {
   return fetchMatches(competitionCode || 'SA');
 }
 
+export async function getUpcomingMatches(competitionCode?: string) {
+  return fetchUpcomingMatches(competitionCode || 'SA');
+}
+
 export async function getCompetitions() {
   return fetchCompetitions();
 }
@@ -65,9 +81,11 @@ export async function getStandings(competitionCode?: string) {
 export default {
   COMPETITIONS,
   fetchMatches,
+  fetchUpcomingMatches,
   fetchCompetitions,
   fetchStandings,
   getMatches,
+  getUpcomingMatches,
   getCompetitions,
   getStandings,
 };
