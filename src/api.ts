@@ -1,10 +1,6 @@
 const BASE_URL = '/football-data';
 const API_KEY = 'e0ca06c07c634d4fb0950365bd82ffd0';
 
-const headers = {
-  'X-Auth-Token': API_KEY,
-};
-
 export const COMPETITIONS = [
   { code: 'SA', name: 'Serie A' },
   { code: 'PL', name: 'Premier League' },
@@ -16,13 +12,21 @@ export const COMPETITIONS = [
 
 async function safeFetch(endpoint: string) {
   try {
-    const response = await fetch(`${BASE_URL}${endpoint}`, { headers });
+    const response = await fetch(`${BASE_URL}${endpoint}`, {
+      method: 'GET',
+      headers: {
+        'X-Auth-Token': API_KEY,
+      },
+    });
+
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      console.error(`Errore risposta API (${response.status}) per endpoint: ${endpoint}`);
+      return null;
     }
+
     return await response.json();
   } catch (error) {
-    console.error(`Errore durante il recupero da ${endpoint}:`, error);
+    console.error(`Errore di rete/fetch per endpoint ${endpoint}:`, error);
     return null;
   }
 }
