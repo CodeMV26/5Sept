@@ -21,7 +21,7 @@ export async function fetchMatches(competitionCode: string = 'SA') {
     const data = await response.json();
     return data.matches || [];
   } catch (error) {
-    console.error('Errore durante il recupero delle partite:', error);
+    console.error('Errore recupero partite:', error);
     return [];
   }
 }
@@ -33,7 +33,19 @@ export async function fetchCompetitions() {
     const data = await response.json();
     return data.competitions || [];
   } catch (error) {
-    console.error('Errore durante il recupero delle competizioni:', error);
+    console.error('Errore recupero competizioni:', error);
+    return [];
+  }
+}
+
+export async function fetchStandings(competitionCode: string = 'SA') {
+  try {
+    const response = await fetch(`${BASE_URL}/competitions/${competitionCode}/standings`, { headers });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const data = await response.json();
+    return data.standings || [];
+  } catch (error) {
+    console.error('Errore recupero classifica:', error);
     return [];
   }
 }
@@ -46,10 +58,16 @@ export async function getCompetitions() {
   return fetchCompetitions();
 }
 
+export async function getStandings(competitionCode?: string) {
+  return fetchStandings(competitionCode || 'SA');
+}
+
 export default {
   COMPETITIONS,
   fetchMatches,
   fetchCompetitions,
+  fetchStandings,
   getMatches,
   getCompetitions,
+  getStandings,
 };
