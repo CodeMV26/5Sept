@@ -1,4 +1,9 @@
 const BASE_URL = '/football-data';
+const API_KEY = 'e0ca06c07c634d4fb0950365bd82ffd0';
+
+const headers = {
+  'X-Auth-Token': API_KEY,
+};
 
 export const COMPETITIONS = [
   { code: 'SA', name: 'Serie A' },
@@ -11,7 +16,7 @@ export const COMPETITIONS = [
 
 async function safeFetch(endpoint: string) {
   try {
-    const response = await fetch(`${BASE_URL}${endpoint}`);
+    const response = await fetch(`${BASE_URL}${endpoint}`, { headers });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
